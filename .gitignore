@@ -1,0 +1,21 @@
+/BoilerPlate.Api/.vs/BoilerPlate.Api/CopilotIndices/17.14.1431.25910/CodeChunks.db
+# Visual Studio / .NET
+bin/
+obj/
+*.user
+*.suo
+*.vsp
+.vscode/
+*.vs/
+*.nupkg
+*.dll
+*.pdb
+appsettings.Development.json
+
+# Node / Angular
+node_modules/
+dist/
+tmp/
+npm-debug.log
+yarn-error.log
+
