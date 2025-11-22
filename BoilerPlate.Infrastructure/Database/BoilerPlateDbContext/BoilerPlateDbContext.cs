@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BoilerPlate.Infrastructure.AppDbContext
+namespace BoilerPlate.Infrastructure.Database.BoilerPlateDbContext
 {
     public class BoilerPlateDbContext : DbContext
     {
@@ -14,6 +14,9 @@ namespace BoilerPlate.Infrastructure.AppDbContext
         {
         }
 
-        public DbSet<User> Users { get; set; }
-    }
+        public DbSet<User> UsersEntity { get; set; }
+          
+    };
+    
+    
 }
