@@ -1,6 +1,7 @@
 ﻿using BoilerPlate.Api.Controllers.Users.DTOS;
 using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces.UserInterface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoilerPlate.Api.Controllers.Users
@@ -8,6 +9,7 @@ namespace BoilerPlate.Api.Controllers.Users
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;

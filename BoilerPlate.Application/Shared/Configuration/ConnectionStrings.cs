@@ -1,4 +1,4 @@
-﻿namespace BoilerPlate.Api.Configuration
+﻿namespace BoilerPlate.Application.Configuration
 {
     public class ConnectionStrings
     {

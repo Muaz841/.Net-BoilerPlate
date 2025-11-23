@@ -1,6 +1,7 @@
 ﻿using BoilerPlate.Application.Entities;
 using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces;
+using BoilerPlate.Application.Shared.InterFaces.Auth;
 using BoilerPlate.Application.Shared.InterFaces.UserInterface;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,11 @@ namespace BoilerPlate.Application.Services.UserServices
     {
 
         private readonly IUnitOfWork _unitOfWork;
-
-        public UserService(IUnitOfWork unitOfWork)
+        private readonly IPasswordHasher _PasswordHasher;
+        public UserService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;
+            _PasswordHasher = passwordHasher;
         }
 
         public async Task<UserDto> CreateUserAsync(string email, string name, string password, CancellationToken ct = default)
@@ -28,7 +30,7 @@ namespace BoilerPlate.Application.Services.UserServices
                 Id = Guid.NewGuid(),
                 Email = email,
                 Name = name,
-                PasswordHash = HashPassword(password),
+                PasswordHash = _PasswordHasher.HashPassword(password),
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -52,7 +54,6 @@ namespace BoilerPlate.Application.Services.UserServices
 
         private static UserDto MapToDto(User user) => new(
         user.Id, user.Email, user.Name, user.CreatedAt);
-
-        private static string HashPassword(string password)  => BCrypt.Net.BCrypt.HashPassword(password);
+        
     }
 }
