@@ -1,27 +1,28 @@
 import { Routes } from '@angular/router';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { DashboardComponent } from './features/dashboard/Dashboard.Component';
+import * as authGuard from './core/guards/auth.gaurd';
 
 export const routes: Routes = [
 
-    { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  {
+    path: 'auth',
+    loadComponent: () => import('./features/auth/login/login.component')
+      .then(m => m.LoginComponent)
+  },
 
-    //    {
-    //     path: 'auth',
-    //     loadChildren: () => import('./features/auth/auth.routes').then(m => m.authRoutes)
-    //   },
-    //   {
-    //     path: 'dashboard',
-    //     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
-    //   },
-    //   {
-    //     path: 'users',
-    //     loadChildren: () => import('./features/users/users.routes').then(m => m.usersRoutes)
-    //   },
-    //   {
-    //     path: 'admin',
-    //     loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes)
-    //   },
-    
-      { path: '**', redirectTo: 'auth/login' }
-    
-      
+
+  {
+    path: '',
+    loadComponent: () => import('./layout/main-layout/main-layout.component')
+      .then(m => m.MainLayoutComponent),
+    canMatch: [authGuard.authGuard],  
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    ]
+  },
+
+
+  { path: '**', redirectTo: 'auth' }
 ];
