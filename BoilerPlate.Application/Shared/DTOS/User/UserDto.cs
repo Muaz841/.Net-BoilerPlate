@@ -6,5 +6,6 @@ using System.Threading.Tasks;
 
 namespace BoilerPlate.Application.Shared.DTOS.User
 {
-    public record UserDto(Guid Id,string Email,string Name,DateTime CreatedAt);
+    public record UserDto(Guid Id, string Email, string Name, DateTime CreatedAt, long PermissionVersion);
 }
+

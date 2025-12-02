@@ -8,7 +8,7 @@ namespace BoilerPlate.Api.Controllers.Users
 {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [Authorize]
     public class UsersController : Controller
     {
@@ -35,7 +35,7 @@ namespace BoilerPlate.Api.Controllers.Users
         }
 
 
-        [HttpPost("CreateUser")]
+        [HttpPost("create")]
         public async Task<ActionResult<UserDto>> Create(CreateUserRequest request, CancellationToken ct)
         {                       
 

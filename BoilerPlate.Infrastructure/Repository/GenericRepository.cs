@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,9 +27,14 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync([id], ct);
     }
 
-    public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default)
+    public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, CancellationToken ct = default)
     {
-        return await _dbSet.ToListAsync(ct);
+        IQueryable<T> query = _dbSet;
+
+        if (filter != null)
+            query = query.Where(filter);
+
+        return await query.ToListAsync(ct);
     }
     public async Task<T> AddAsync(T entity, CancellationToken ct = default)
     {

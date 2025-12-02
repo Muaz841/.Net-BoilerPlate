@@ -22,10 +22,18 @@ namespace BoilerPlate.Api.Extensions
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configurations)
-        {
-            // User Service
+        {            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddDistributedMemoryCache();
+
+
+            // FOR PRODUCTION LATER – just uncomment and comment the line above
+            // builder.Services.AddStackExchangeRedisCache(options =>
+            // {
+            //     options.Configuration = builder.Configuration.GetConnectionString("Redis");
+            //     options.InstanceName = "BoilerPlate_";
+            // });
 
             return services;
         }
@@ -35,7 +43,7 @@ namespace BoilerPlate.Api.Extensions
 
             services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
 
-            // DbContext
+            
             var connectionStrings = config.GetSection("ConnectionStrings").Get<ConnectionStrings>();
             services.AddDbContext<BoilerPlateDbContext>(options =>
                options.UseSqlServer(connectionStrings.Default));
@@ -44,6 +52,7 @@ namespace BoilerPlate.Api.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();            
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddFluentValidationAutoValidation();
+            services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();

@@ -3,12 +3,7 @@ using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces;
 using BoilerPlate.Application.Shared.InterFaces.Auth;
 using BoilerPlate.Application.Shared.InterFaces.UserInterface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BoilerPlate.Application.Services.UserServices
 {
@@ -16,11 +11,17 @@ namespace BoilerPlate.Application.Services.UserServices
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<UserRole> _userRole;
+        private readonly IRepository<UserPermission> _userPermission;
+        private readonly IRepository<RolePermission> _rolePermissions;
         private readonly IPasswordHasher _PasswordHasher;
-        public UserService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
+        public UserService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, IRepository<UserRole> userRole, IRepository<UserPermission> userPermission, IRepository<RolePermission> rolePermissions)
         {
             _unitOfWork = unitOfWork;
             _PasswordHasher = passwordHasher;
+            _userRole = userRole;
+            _userPermission = userPermission;
+            _rolePermissions = rolePermissions;
         }
 
         public async Task<UserDto> CreateUserAsync(string email, string name, string password, CancellationToken ct = default)
@@ -42,7 +43,7 @@ namespace BoilerPlate.Application.Services.UserServices
 
         public async Task<IReadOnlyList<UserDto>> GetAllUsersAsync(CancellationToken ct = default)
         {
-            var users = await _unitOfWork.Users.GetAllAsync(ct);
+            var users = await _unitOfWork.Users.GetAllAsync(null,ct);
             return users.Select(MapToDto).ToList();
         }
 
@@ -52,8 +53,32 @@ namespace BoilerPlate.Application.Services.UserServices
             return user is null ? null : MapToDto(user);
         }
 
-        private static UserDto MapToDto(User user) => new(
-        user.Id, user.Email, user.Name, user.CreatedAt);
-        
+        public async Task<IReadOnlyCollection<UserRole>> GetUserRolesAsync(Guid userId)
+                      => await _userRole.GetAllAsync(ur => ur.UserId == userId);
+
+        public async Task<IReadOnlyCollection<UserPermission>> GetUserPermissionsAsync(Guid userId)
+                       => await _userPermission.GetAllAsync(up => up.UserId == userId);
+
+        public async Task<IReadOnlyCollection<RolePermission>> GetRolePermissionsAsync(int roleId)
+                        => await _rolePermissions.GetAllAsync(rp => rp.RoleId == roleId);        
+
+        public async Task UpdateUserAsync(UserDto userinput)
+        {
+           var user  =  MapToEntity(userinput);
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        private static UserDto MapToDto(User user) => new(user.Id, user.Email, user.Name, user.CreatedAt, user.PermissionVersion);
+
+         private static User MapToEntity(UserDto user) =>
+         new User
+         {
+             Id = user.Id,
+             Email = user.Email,
+             Name = user.Name,
+             UpdatedAt = DateTime.UtcNow,
+             PermissionVersion = user.PermissionVersion
+         };
     }
 }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BoilerPlate.Api.Controllers.AuthController
 {
+
+    [Route("api/auth")]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -14,7 +16,7 @@ namespace BoilerPlate.Api.Controllers.AuthController
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<LoginResponse>> Login(LoginRequest request, CancellationToken ct)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request, CancellationToken ct)
         {
             var result = await _authService.LoginAsync(request, ct);
             return result is null ? Unauthorized() : Ok(result);
