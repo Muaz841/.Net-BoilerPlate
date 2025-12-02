@@ -1,6 +1,7 @@
 ﻿using BoilerPlate.Application.Configuration;
 using BoilerPlate.Application.Entities;
 using BoilerPlate.Application.Shared.Dtos.Auth;
+using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces.Auth;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +28,11 @@ namespace BoilerPlate.Application.Services.Auth
             _jwt = jwtOptions.Value;
             _PasswordHasher = passwordHasher;
         }
+
+        //public async Task<User?> GetByEmailAsyncI(string email, CancellationToken ct = default)
+        //{
+           
+        //}
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default)
         {
@@ -59,6 +65,15 @@ namespace BoilerPlate.Application.Services.Auth
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<User> GetByEmailAsyncI(string email, CancellationToken ct)
+        {
+            return await _authRepo.GetByEmailAsync(email, ct);
+        }
+
+
+        private static UserDto MapToDto(User user) => new(
+        user.Id, user.Email, user.Name, user.CreatedAt);
     }
 
 }

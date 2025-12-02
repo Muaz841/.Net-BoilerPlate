@@ -26,6 +26,14 @@ public class GenericRepository<T> : IRepository<T> where T : class
         return await _dbSet.FindAsync([id], ct);
     }
 
+    public async Task GetByEmailAsync(string email, CancellationToken ct = default)
+    {
+        var blog = _context.UsersEntity
+                   .Where(b => b.Email == email)
+                   .FirstOrDefault();
+         _dbSet.FindAsync(blog);
+    }
+
     public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken ct = default)
     {
         return await _dbSet.ToListAsync(ct);
@@ -45,5 +53,7 @@ public class GenericRepository<T> : IRepository<T> where T : class
     {
         _dbSet.Remove(entity);
     }
+
+    
 }
 

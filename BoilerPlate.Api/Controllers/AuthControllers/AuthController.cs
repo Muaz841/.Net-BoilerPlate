@@ -1,4 +1,6 @@
-﻿using BoilerPlate.Application.Shared.Dtos.Auth;
+﻿using BoilerPlate.Application.Entities;
+using BoilerPlate.Application.Shared.Dtos.Auth;
+using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +20,13 @@ namespace BoilerPlate.Api.Controllers.AuthController
         {
             var result = await _authService.LoginAsync(request, ct);
             return result is null ? Unauthorized() : Ok(result);
+        }
+
+        [HttpGet("{email}/GetByEmail")]
+        public async Task<ActionResult<User>> GetByEmail(string email, CancellationToken ct)
+        {
+            var users = await _authService.GetByEmailAsyncI(email, ct);
+            return users is null ? NotFound() : Ok(users);
         }
     }
 }

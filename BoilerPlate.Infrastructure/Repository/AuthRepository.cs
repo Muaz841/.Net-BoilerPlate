@@ -1,4 +1,5 @@
 ﻿using BoilerPlate.Application.Entities;
+using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces.Auth;
 using BoilerPlate.Infrastructure.Database.BoilerPlateDbContext;
 using Microsoft.EntityFrameworkCore;
@@ -18,5 +19,9 @@ namespace BoilerPlate.Infrastructure.Repository
 
         public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
             => _context.UsersEntity.FirstOrDefaultAsync(u => u.Email == email, ct);
+
+        
+            
+        
     }
 }
