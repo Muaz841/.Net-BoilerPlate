@@ -17,5 +17,6 @@ namespace BoilerPlate.Application.Shared.InterFaces.UserInterface
         Task<IReadOnlyCollection<UserRole>> GetUserRolesAsync(Guid userId);
         Task<UserDto> CreateUserAsync(string email, string name, string password, CancellationToken ct = default);
         Task UpdateUserAsync(UserDto userinput);
+        Task<UserDto> GetCurrentUserAsync(CancellationToken ct = default);
     }
 }

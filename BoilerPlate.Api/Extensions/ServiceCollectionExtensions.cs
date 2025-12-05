@@ -56,6 +56,7 @@ namespace BoilerPlate.Api.Extensions
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
             services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
+            services.AddHttpContextAccessor();
 
             return services;
 

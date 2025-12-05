@@ -1,4 +1,5 @@
-﻿using BoilerPlate.Application.Shared.InterFaces;
+﻿using BoilerPlate.Api.GlobalExceptionHandlerMiddleware;
+using BoilerPlate.Application.Shared.InterFaces;
 using BoilerPlate.Infrastructure.Database.BoilerPlateDbContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ public static class ApplicationBuilderExtensions
     public static IApplicationBuilder UseApplicationPipeline(this IApplicationBuilder app)
     {
         var env = app.ApplicationServices.GetRequiredService<IHostEnvironment>();
+        app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
         if (env.IsDevelopment())
         {
@@ -30,9 +32,12 @@ public static class ApplicationBuilderExtensions
         }
 
         app.UseHttpsRedirection();
-        app.UseRouting();
 
         app.UseCors("AllowAll");
+
+        app.UseRouting();
+
+        
 
         app.UseAuthentication();
         app.UseAuthorization();
