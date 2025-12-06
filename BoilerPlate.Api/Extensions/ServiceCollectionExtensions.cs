@@ -23,7 +23,7 @@ namespace BoilerPlate.Api.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configurations)
         {            
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, Userrepository>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddDistributedMemoryCache();
 

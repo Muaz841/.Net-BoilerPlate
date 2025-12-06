@@ -3,15 +3,12 @@
     <h2>BoilerPlate Login</h2>
     <p>Enterprise Clean Architecture</p>
 
-    <!-- Username -->
     <input 
       type="text" 
-      placeholder="email" 
+      placeholder="Email" 
       [(ngModel)]="loginInput.email"
       style="margin-bottom: 10px; padding: 8px; width: 100%;"
     />
-
-    <!-- Password -->
     <input 
       type="password" 
       placeholder="Password"
@@ -19,8 +16,12 @@
       style="margin-bottom: 20px; padding: 8px; width: 100%;"
     />
 
-    <!-- Login Button -->
-    <button (click)="login(loginInput)">Login → Dashboard</button>
+    <button (click)="login(loginInput)">Login</button>
+    <button type="button" class="register-btn" routerLink="/register" aria-label="Register">Register</button>
 
+    <div *ngIf="loginError" class="login-error">
+      <span>{{ loginError }}</span>
+      <button class="register-link" routerLink="/register">Register Now</button>
+    </div>
   </div>
 </div>

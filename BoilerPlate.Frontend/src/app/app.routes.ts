@@ -9,7 +9,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/login/login.component')
       .then(m => m.LoginComponent)
   },
-
+  {
+    path: 'register',
+    loadComponent: () => import('./features/auth/register.component')
+      .then(m => m.RegisterComponent)
+  },
   {
     path: '',
     loadComponent: () => import('./layout/main-layout/main-layout.component')
@@ -20,7 +24,5 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
-
-
   { path: '**', redirectTo: 'auth' }
 ];

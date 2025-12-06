@@ -4,17 +4,20 @@ import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
 import { LoginRequest } from '../../../core/services/Interfaces/loginRequest.interface';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ FormsModule],
+  imports: [FormsModule, CommonModule],
   standalone: true,  
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   loginInput: LoginRequest = { email: '', password: '' };
+  loginError: string | null = null;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -23,8 +26,10 @@ export class LoginComponent {
 
   
  login(userInput: LoginRequest):  void {    
+  this.loginError = null;
   if (!userInput.email?.trim() || !userInput.password?.trim()) {
-  return alert("Invalid input");
+  this.loginError = 'Invalid input.';
+  return;
 }
   this.authService.login(userInput).subscribe({
     next: () => {     
@@ -33,11 +38,17 @@ export class LoginComponent {
        
           this.router.navigate(['/dashboard']);
         } else {
-          console.error('Token not set, navigation blocked.');
+          this.loginError = 'Token not set, navigation blocked.';
         }
       }, 0)
     },
-    error: (err) => alert('Login failed: ' + (err.error?.message || 'Invalid credentials'))
+    error: (err) => {
+      if (err.error?.message?.toLowerCase().includes('not found')) {
+        this.loginError = 'User not found. Please register.';
+      } else {
+        this.loginError = 'Login failed: ' + (err.error?.message || 'Invalid credentials');
+      }
+    }
   });
 }
   
@@ -47,7 +58,7 @@ export class LoginComponent {
   }
 
 getallusers() : void{
-   this.userService.getAll()
+   this.userService.getAll();
 }
 
 }

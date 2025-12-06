@@ -38,7 +38,7 @@ login(credentials: LoginRequest): Observable<LoginResponse> {
 } 
 
   register(data: RegisterRequest): Observable<any> {
-    return this.post('/api/users', data);
+    return this.post('/api/auth/create', data);
   }
 
 

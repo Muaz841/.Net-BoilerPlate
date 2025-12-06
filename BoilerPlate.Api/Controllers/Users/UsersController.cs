@@ -33,20 +33,6 @@ namespace BoilerPlate.Api.Controllers.Users
             var user = await _userService.GetUserByIdAsync(id, ct);
             return user is null ? NotFound() : Ok(user);
         }
-
-
-        [HttpPost("create")]
-        public async Task<ActionResult<UserDto>> Create(CreateUserRequest request, CancellationToken ct)
-        {                       
-
-            var createdUser = await _userService.CreateUserAsync(
-                request.Email,
-                request.Name,
-                request.Password, 
-                ct);
-            return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
-        }
-
        
     }
 }

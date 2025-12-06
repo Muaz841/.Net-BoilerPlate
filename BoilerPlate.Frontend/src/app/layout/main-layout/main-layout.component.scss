@@ -14,3 +14,16 @@
     flex: 1;
     padding: 20px;
   }
+
+.fancy-footer {
+  width: 100%;
+  background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+  color: #fff;
+  text-align: center;
+  padding: 18px 0 12px 0;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  box-shadow: 0 -2px 16px #764ba233;
+  margin-top: 32px;
+}

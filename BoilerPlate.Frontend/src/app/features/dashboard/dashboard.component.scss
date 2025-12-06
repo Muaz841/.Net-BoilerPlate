@@ -1,0 +1,78 @@
+.dashboard-page {
+  min-height: 100vh;
+  padding: 32px 0 64px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.dashboard-welcome {
+  text-align: center;
+  margin-bottom: 32px;
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 12px #0002;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #e0e0e0;
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+}
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+}
+.dashboard-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 32px #764ba233;
+  padding: 32px 28px;
+  min-width: 260px;
+  max-width: 320px;
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  h2 {
+    color: #764ba2;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  ul {
+    margin: 0 0 0 18px;
+    padding: 0;
+    color: #444;
+    font-size: 1.05rem;
+  }
+  pre.structure {
+    background: #f6f6fa;
+    color: #764ba2;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    padding: 12px 10px;
+    margin: 0;
+    width: 100%;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+  }
+}
+@media (max-width: 900px) {
+  .dashboard-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .dashboard-card {
+    max-width: 100%;
+    width: 95%;
+  }
+}

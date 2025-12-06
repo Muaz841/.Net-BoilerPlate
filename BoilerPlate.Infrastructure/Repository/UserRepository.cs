@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace BoilerPlate.Application.Services.UserServices
 {
-    public  class UserService : IUserService
+    public  class Userrepository : IUserService
     {
 
         private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +25,7 @@ namespace BoilerPlate.Application.Services.UserServices
         private readonly IHttpContextAccessor _httpContext;
         private readonly BoilerPlateDbContext _context;
 
-        public UserService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, IRepository<UserRole> userRole, IRepository<UserPermission> userPermission, IRepository<RolePermission> rolePermissions, IHttpContextAccessor httpContext, BoilerPlateDbContext context)
+        public Userrepository(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, IRepository<UserRole> userRole, IRepository<UserPermission> userPermission, IRepository<RolePermission> rolePermissions, IHttpContextAccessor httpContext, BoilerPlateDbContext context)
         {
             _unitOfWork = unitOfWork;
             _PasswordHasher = passwordHasher;
