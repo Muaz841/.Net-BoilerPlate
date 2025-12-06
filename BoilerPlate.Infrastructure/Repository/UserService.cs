@@ -4,7 +4,9 @@ using BoilerPlate.Application.Shared.DTOS.User;
 using BoilerPlate.Application.Shared.InterFaces;
 using BoilerPlate.Application.Shared.InterFaces.Auth;
 using BoilerPlate.Application.Shared.InterFaces.UserInterface;
+using BoilerPlate.Infrastructure.Database.BoilerPlateDbContext;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
@@ -21,8 +23,9 @@ namespace BoilerPlate.Application.Services.UserServices
         private readonly IRepository<RolePermission> _rolePermissions;
         private readonly IPasswordHasher _PasswordHasher;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly BoilerPlateDbContext _context;
 
-        public UserService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, IRepository<UserRole> userRole, IRepository<UserPermission> userPermission, IRepository<RolePermission> rolePermissions, IHttpContextAccessor httpContext)
+        public UserService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher, IRepository<UserRole> userRole, IRepository<UserPermission> userPermission, IRepository<RolePermission> rolePermissions, IHttpContextAccessor httpContext, BoilerPlateDbContext context)
         {
             _unitOfWork = unitOfWork;
             _PasswordHasher = passwordHasher;
@@ -30,6 +33,7 @@ namespace BoilerPlate.Application.Services.UserServices
             _userPermission = userPermission;
             _rolePermissions = rolePermissions;
             _httpContext = httpContext;
+            _context = context;
         }
 
         public async Task<UserDto> CreateUserAsync(string email, string name, string password, CancellationToken ct = default)
@@ -65,10 +69,22 @@ namespace BoilerPlate.Application.Services.UserServices
                       => await _userRole.GetAllAsync(ur => ur.UserId == userId);
 
         public async Task<IReadOnlyCollection<UserPermission>> GetUserPermissionsAsync(Guid userId)
-                       => await _userPermission.GetAllAsync(up => up.UserId == userId);
+        {
+            return await _context.UserPermissions
+                .AsNoTracking()
+                .Where(up => up.UserId == userId)
+                .Include(up => up.Permission!)  
+                .ToListAsync();
+        }
 
         public async Task<IReadOnlyCollection<RolePermission>> GetRolePermissionsAsync(int roleId)
-                        => await _rolePermissions.GetAllAsync(rp => rp.RoleId == roleId);        
+        {
+            return await _context.RolePermissions
+                .AsNoTracking()
+                .Where(rp => rp.RoleId == roleId)
+                .Include(rp => rp.Permission!)   
+                .ToListAsync();
+        }
 
         public async Task UpdateUserAsync(UserDto userinput)
         {
@@ -79,23 +95,23 @@ namespace BoilerPlate.Application.Services.UserServices
 
         public async Task<UserDto> GetCurrentUserAsync(CancellationToken ct = default)
         {
-            // 1. Get the ClaimsPrincipal from HttpContext
+            
             var claimsPrincipal = _httpContext.HttpContext?.User;
             if (claimsPrincipal == null)
                 throw new UnauthorizedAccessException("No user context");
 
-            // 2. Find the user ID claim (sub or nameidentifier)
+            
             var userIdClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)
                               ?? claimsPrincipal.FindFirst(JwtRegisteredClaimNames.Sub);
 
             if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
                 throw new UnauthorizedAccessException("User ID not found in token");
 
-            // 3. Load the user from repository
+            
             var user = await _unitOfWork.Users.GetByIdAsync(userId, ct)
                        ?? throw new EntityNotFoundException(typeof(User), userId);
 
-            // 4. Map to DTO
+            
             return new UserDto(
                 user.Id,
                 user.Email,
