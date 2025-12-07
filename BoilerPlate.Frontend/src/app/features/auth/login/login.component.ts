@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService } from '../../../core/services/user.service';
 import { LoginRequest } from '../../../core/services/Interfaces/loginRequest.interface';
@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule],
   standalone: true,  
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -56,6 +56,8 @@ export class LoginComponent {
     this.authService.logout();
     this.router.navigate(['/auth']);
   }
+
+  
 
 getallusers() : void{
    this.userService.getAll();

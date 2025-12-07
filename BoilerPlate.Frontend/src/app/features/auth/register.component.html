@@ -1,25 +1,39 @@
-<div class="register-page">
-  <div class="register-box">
-    <h2>Create Account</h2>
-    <input 
-      type="email" 
-      placeholder="Email" 
-      [(ngModel)]="registerInput.email"
-      style="margin-bottom: 10px; padding: 8px; width: 100%;"
-    />
-    <input 
-      type="text" 
-      placeholder="Name" 
-      [(ngModel)]="registerInput.name"
-      style="margin-bottom: 10px; padding: 8px; width: 100%;"
-    />
-    <input 
-      type="password" 
-      placeholder="Password"
-      [(ngModel)]="registerInput.password"
-      style="margin-bottom: 20px; padding: 8px; width: 100%;"
-    />
-    <button (click)="register()" [disabled]="loading">Register</button>
-    <div *ngIf="loading" style="margin-top: 10px; color: #667eea;">Registering...</div>
+<div class="auth auth--register">
+  <div class="auth__card">
+    <h2 class="auth__title">Create Account</h2>
+
+    <div class="auth__form">
+      <input
+        type="email"
+        class="auth__input"
+        placeholder="Email"
+        [(ngModel)]="registerInput.email"
+        aria-label="Email"
+      />
+
+      <input
+        type="text"
+        class="auth__input"
+        placeholder="Name"
+        [(ngModel)]="registerInput.name"
+        aria-label="Name"
+      />
+
+      <input
+        type="password"
+        class="auth__input"
+        placeholder="Password"
+        [(ngModel)]="registerInput.password"
+        aria-label="Password"
+      />
+
+      <button class="auth__btn" (click)="register()" [disabled]="loading">
+        Register
+      </button>
+
+      <div *ngIf="loading" class="auth__loading">
+        Registering...
+      </div>
+    </div>
   </div>
 </div>

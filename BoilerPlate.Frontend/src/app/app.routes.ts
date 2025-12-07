@@ -3,6 +3,8 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import * as authGuard from './core/guards/auth.gaurd';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 
+
+
 export const routes: Routes = [
   {
     path: 'auth',
